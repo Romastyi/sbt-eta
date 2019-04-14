@@ -10,7 +10,15 @@ jobs:
     - run: 
         name: Running the sbt example
         working_directory: example
-        command: sbt run
+        command: sbt -Detlas.logger.cmd.level=INFO -Detlas.logger.output=true run | tee run_output.log
+    - run:
+        name: Check sbt run output
+        working_directory: example
+        command: "grep -q 'Hello: 126' run_output.log"
+    - run:
+        name: Running sbt test
+        working_directory: example
+        command: sbt -Detlas.logger.cmd.level=INFO -Detlas.logger.output=true test
 
 workflows:
   version: 2
